@@ -45,6 +45,8 @@ def weather():
     response = requests.get(url, params=params)
     data = response.json()
     
+    print(data, flush=True)
+    
     temperature = data["current"]["temperature_2m"]
     
     return {
