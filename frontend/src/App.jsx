@@ -2,6 +2,8 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+    const API_URL = import.meta.env.VITE_API_URL;
+
     const [temperature, setTemperature] = useState(null);
     const [city, setCity] = useState("");
     const [error, setError] = useState("");
@@ -16,7 +18,7 @@ function App() {
 
         setLoading(true);
 
-        fetch(`http://127.0.0.1:5000/weather?city=${city}`)
+        fetch(`${API_URL}/weather?city=${city}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.error) {
