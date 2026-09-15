@@ -34,7 +34,7 @@ def weather():
     latitude = geocoding_data["results"][0]["latitude"]
     longitude = geocoding_data["results"][0]["longitude"]
     
-    url = "https://api.open-meteo.com/v1/forecast"
+    url = "https://api.open-meteo.com/v1/gfs"
     
     params = {
         "latitude": latitude,
