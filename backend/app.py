@@ -1,6 +1,12 @@
 from flask import Flask, request
 from flask_cors import CORS
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
 
 app = Flask(__name__)
 CORS(app)
@@ -12,34 +18,12 @@ def home():
 @app.route("/weather")
 def weather():
     city = request.args.get("city")
-    geocoding_url = "https://geocoding-api.open-meteo.com/v1/search"
     
-    geocoding_params = {
-        "name": city,
-        "count": 1
-    }
-    
-    geocoding_response = requests.get(
-        geocoding_url,
-        params=geocoding_params
-    )
-    
-    geocoding_data = geocoding_response.json()
-    
-    if "results" not in geocoding_data:
-        return {
-            "error": "都市が見つかりませんでした"
-        }, 404
-    
-    latitude = geocoding_data["results"][0]["latitude"]
-    longitude = geocoding_data["results"][0]["longitude"]
-    
-    url = "https://api.open-meteo.com/v1/gfs"
-    
+    url = "https://api.weatherapi.com/v1/current.json"
+       
     params = {
-        "latitude": latitude,
-        "longitude": longitude,
-        "current": "temperature_2m"
+        "key": WEATHER_API_KEY,
+        "q": city
     }
     
     response = requests.get(url, params=params)
@@ -47,7 +31,7 @@ def weather():
     
     print(data, flush=True)
     
-    temperature = data["current"]["temperature_2m"]
+    temperature = data["current"]["temp_c"]
     
     return {
         "temperature": temperature
